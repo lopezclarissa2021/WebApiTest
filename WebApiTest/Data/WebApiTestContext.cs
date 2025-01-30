@@ -15,5 +15,6 @@ namespace WebApiTest.Data
         }
 
         public DbSet<WebApiTest.Models.Content> Content { get; set; } = default!;
+        public DbSet<WebApiTest.Models.Category> Category { get; set; } = default!;
     }
 }

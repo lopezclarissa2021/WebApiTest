@@ -1,4 +1,7 @@
-﻿namespace WebApiTest.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebApiTest.Models
 {
     public class Content
     {
@@ -8,7 +11,12 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string Author { get; set; }
-        public string Category { get; set; }
         public VisibilityStatus Visibility { get; set; }
+
+        [ForeignKey(nameof(Category.CategoryId))]
+        public int CategoryId { get; set; }
+
+        // navigation property
+        public virtual Category Category { get; set; }
     }
 }
