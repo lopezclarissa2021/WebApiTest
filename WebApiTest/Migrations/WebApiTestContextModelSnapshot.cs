@@ -37,6 +37,28 @@ namespace WebApiTest.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Food"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Tech"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "News"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Tacos"
+                        });
                 });
 
             modelBuilder.Entity("WebApiTest.Models.Content", b =>
@@ -76,6 +98,19 @@ namespace WebApiTest.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Content");
+
+                    b.HasData(
+                        new
+                        {
+                            ContentId = 1,
+                            Author = "Jesse",
+                            Body = "Lorem ipsum and stuff",
+                            CategoryId = 3,
+                            CreatedAt = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "First Post",
+                            UpdatedAt = new DateTime(2025, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Visibility = 0
+                        });
                 });
 
             modelBuilder.Entity("WebApiTest.Models.Content", b =>

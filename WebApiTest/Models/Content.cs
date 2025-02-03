@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebApiTest.Models
 {
@@ -17,6 +18,6 @@ namespace WebApiTest.Models
         public int CategoryId { get; set; }
 
         // navigation property
-        public virtual Category Category { get; set; }
+        public virtual Category? Category { get; set; }
     }
 }

@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebApiTest.Data;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using WebApiTest.Areas.Identity.Data;
 
 namespace WebApiTest
 {
@@ -14,6 +16,8 @@ namespace WebApiTest
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<WebApiTestContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("WebApiTestContext") ?? throw new InvalidOperationException("Connection string 'WebApiTestContext' not found.")));
+
+            builder.Services.AddDefaultIdentity<BlogUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<WebApiIdentity>();
 
             // Add services to the container.
 
