@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebApiTest.Areas.Identity.Data;
 using WebApiTest.Models;
 
 namespace WebApiTest.Data
 {
-    public class WebApiTestContext : DbContext
+    public class WebApiTestContext : IdentityDbContext<BlogUser>
     {
         public WebApiTestContext (DbContextOptions<WebApiTestContext> options)
             : base(options)
@@ -55,7 +57,7 @@ namespace WebApiTest.Data
                     ContentId = 1,
                     Title = "First Post",
                     Body = "Lorem ipsum and stuff",
-                    Author = "Jesse",
+                    AuthorId = "userid here", // TODO: add in a base user to use
                     CreatedAt = new DateTime(2025, 02, 03),
                     UpdatedAt = new DateTime(2025, 02, 03),
                     Visibility = VisibilityStatus.Visible,

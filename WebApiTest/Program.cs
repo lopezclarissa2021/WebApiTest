@@ -14,10 +14,13 @@ namespace WebApiTest
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            // link up the database 
             builder.Services.AddDbContext<WebApiTestContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("WebApiTestContext") ?? throw new InvalidOperationException("Connection string 'WebApiTestContext' not found.")));
 
-            builder.Services.AddDefaultIdentity<BlogUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<WebApiIdentity>();
+            // links up identity, and links it to the database
+            builder.Services.AddDefaultIdentity<BlogUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<WebApiTestContext>();
 
             // Add services to the container.
 
@@ -45,6 +48,7 @@ namespace WebApiTest
 
 
             app.MapControllers();
+            app.MapRazorPages();
 
             Content test = new Content
             {
