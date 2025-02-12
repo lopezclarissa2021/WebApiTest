@@ -20,6 +20,7 @@ namespace WebApiTest
 
             // links up identity, and links it to the database
             builder.Services.AddDefaultIdentity<BlogUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<WebApiTestContext>();
 
             // Add services to the container.
@@ -50,16 +51,7 @@ namespace WebApiTest
             app.MapControllers();
             app.MapRazorPages();
 
-            Content test = new Content
-            {
-                ContentId = 1,
-                Title = "Toast",
-                Body = "This is some text",
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                Author = "Jesse",
-                Visibility = VisibilityStatus.Visible
-            };
+           
 
             app.Run();
         }

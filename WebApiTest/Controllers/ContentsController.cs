@@ -32,6 +32,7 @@ namespace WebApiTest.Controllers
 
         // GET: api/Contents/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Content>> GetContent(int id)
         {
             var content = await _context.Content.FindAsync(id);
@@ -47,6 +48,7 @@ namespace WebApiTest.Controllers
         // PUT: api/Contents/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles= "Admin")]
         public async Task<IActionResult> PutContent(int id, Content content)
         {
             if (id != content.ContentId)

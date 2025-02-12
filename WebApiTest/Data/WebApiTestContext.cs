@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApiTest.Areas.Identity.Data;
@@ -24,6 +25,17 @@ namespace WebApiTest.Data
             base.OnModelCreating(modelBuilder);
 
             // add seed data
+
+            // Add User Data
+
+            // Add Content Data
+
+
+            // seed user
+            
+
+            
+
             modelBuilder.Entity<Category>().HasData(
                 new Category
                 {
@@ -57,7 +69,7 @@ namespace WebApiTest.Data
                     ContentId = 1,
                     Title = "First Post",
                     Body = "Lorem ipsum and stuff",
-                    AuthorId = "userid here", // TODO: add in a base user to use
+                    //AuthorId = userId, // TODO: add in a base user to use
                     CreatedAt = new DateTime(2025, 02, 03),
                     UpdatedAt = new DateTime(2025, 02, 03),
                     Visibility = VisibilityStatus.Visible,
