@@ -1,7 +1,7 @@
 <ul>
   <li><a [routerLink]="['']">Home</a></li>
   <li><a [routerLink]="['post']">List Posts</a></li>
-  <li *ngFor="let page of staticPages">
-    <a> [ routerlink]="['post', page.id]">{{ page.displayName}}</a>
+  <li *ngFor="let post of staticPosts">
+    <a> [ routerlink]="['post', post.id]">{{ post.displayName}}</a>
   </li>
 </ul>

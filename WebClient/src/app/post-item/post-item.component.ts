@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DataService, Page } from '../data.service';
+import { DataService, Post } from '../data.service';
 
 @Component({
   selector: 'app-post-item',
@@ -9,10 +9,10 @@ import { DataService, Page } from '../data.service';
 })
 
 export class PostListComponent {
-  pages: Page[] = [];
+  posts: Post[] = [];
   constructor(private data: DataService) {
-    this.data.getAllPages().subscribe(data => {
-      this.pages = data;
+    this.data.getAllPosts().subscribe(data => {
+      this.posts = data;
     })
 
   }

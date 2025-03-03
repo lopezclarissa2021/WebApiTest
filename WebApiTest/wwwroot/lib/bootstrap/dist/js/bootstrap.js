@@ -1200,7 +1200,7 @@
     }
     nextWhenVisible() {
       // FIXME TODO use `document.visibilityState`
-      // Don't call next when the page isn't visible
+      // Don't call next when the post isn't visible
       // or the carousel or its parent isn't visible
       if (!document.hidden && isVisible(this._element)) {
         this.next();
@@ -4149,7 +4149,7 @@
       if (![ARROW_LEFT_KEY, ARROW_RIGHT_KEY, ARROW_UP_KEY, ARROW_DOWN_KEY, HOME_KEY, END_KEY].includes(event.key)) {
         return;
       }
-      event.stopPropagation(); // stopPropagation/preventDefault both added to support up/down keys without scrolling the page
+      event.stopPropagation(); // stopPropagation/preventDefault both added to support up/down keys without scrolling the post
       event.preventDefault();
       const children = this._getChildren().filter(element => !isDisabled(element));
       let nextActiveElement;

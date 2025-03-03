@@ -49,7 +49,7 @@ namespace WebApiTest
 
 
             app.MapControllers();
-            app.MapRazorPages();
+            app.MapRazorPosts();
 
            
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-interface PageLink {
+interface PostLink {
   id: number;
   component: Component | undefined;
   displayName: string;
@@ -12,7 +12,7 @@ interface PageLink {
     styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-    staticPages: PageLink[] = [
+    staticPosts: PostLink[] = [
         {
             id: 1,
             component: undefined,

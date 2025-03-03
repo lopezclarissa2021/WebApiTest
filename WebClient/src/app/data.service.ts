@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-export interface Page {
+import { delay, map, tap } from 'rxjs/operators';
+export interface Post {
   contentId: number;
   title: string;
   body: string;
@@ -16,7 +16,7 @@ export interface Page {
 export interface Category {
   categoryId: number;
   categoryName: string;
-  postedContent: Page[];
+  postedContent: Post[];
 }
 
 @Injectable({
@@ -24,10 +24,10 @@ export interface Category {
 })
 export class DataService {
 
-  pages: Page[];
+  posts: Post[];
 
   constructor(private _http: HttpClient) {
-    this.pages = [
+    this.posts = [
       {
         contentId: 1,
         title: 'Toast is the best!',
@@ -87,27 +87,45 @@ export class DataService {
     ];
   }
 
-  getAllPages(): Observable<Page[]> {
-    return this._http.get<Page[]>('/api/contents');
+  getAllPosts(): Observable<Post[]> {
+    return this._http.get<Post[]>('/api/contents');
+
+    /*
+    .pipe(
+      map(arr => {
+        return arr.map(e => {
+          e.title = "Toast";
+          return e;
+        });
+                 
+      })
+    );
+    */
   }
 
-  getPageById(id: number): Observable<Page> {
-    return this._http.get<Page>('/api/contents/' + id);
+  getPostById(id: number): Observable<Post> {
+    return this._http.get<Post>('/api/contents/' + id).pipe(
+      tap(x => {
+        console.log('Fired getPostById with the following object', x);
+     
+      })
+
+    );
   }
 
-  createPage(page: Page): Observable<Page> {
-    return this._http.post<Page>('/api/contents', page);
+  createPost(post: Post): Observable<Post> {
+    return this._http.post<Post>('/api/contents', post);
   }
 
-  updatePage(page: Page): Observable<Page> {
-    return this._http.put<Page>('/api/contents/' + page.contentId, page);
+  updatePost(post: Post): Observable<Post> {
+    return this._http.put<Post>('/api/contents/' + post.contentId, post);
   }
 
-  deletePageById(id: number): Observable<any> {
+  deletePostById(id: number): Observable<any> {
     return this._http.delete<any>('/api/contents/' + id);
   }
 
-  deletePage(page: Page): Observable<any> {
-    return this._http.delete<any>('/api/contents/' + page.contentId);
+  deletePost(post: Post): Observable<any> {
+    return this._http.delete<any>('/api/contents/' + post.contentId);
   }
 }

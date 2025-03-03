@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { DataService, Page } from "../data.service";
+import { DataService, Post } from "../data.service";
 
 
 @Component({
@@ -9,9 +9,9 @@ import { DataService, Page } from "../data.service";
   styleUrl: './post-list.component.css'
 })
 export class PostListComponent {
-  pages: Page[];
+  posts: Post[];
 
   constructor(private data: DataService) {
-    this.pages = this.data.pages;
+    this.posts = this.data.posts;
   }
 }

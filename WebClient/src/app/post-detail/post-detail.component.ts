@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService, Page } from '../data.service';
+import { DataService, Post } from '../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-post-detail',
   standalone: false,
   templateUrl: './post-detail.component.html',
-  styleUrl: './post-detail.component.css'
+  styleUrls: ['./post-detail.component.css']
 })
 export class PostDetailComponent implements OnInit {
   id: number = 0;
-  post: Page | undefined;
+  post: Post | undefined;
 
-  constructor(private data: DataService,
+  constructor(
+    private data: DataService,
     private route: ActivatedRoute,
-    private router: Router) {
-
+    private router: Router
+  ) {
     this.id = 0;
     this.post = {
       contentId: 0,
@@ -32,20 +34,21 @@ export class PostDetailComponent implements OnInit {
       visibility: 0
     };
   }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.id = Number(params.get("id"));
-      this.post = this.data.pages.find(p => p.contentId == this.id);
-
-      this.data.getPageById(this.id).subscribe(page => {
-        this.post = page;
-
-      });
-
+    this.route.paramMap.pipe(
+        mergeMap(params => {
+        this.id = Number(params.get("id"));
+        return this.data.getPostById(this.id);
+      })
+    ).subscribe(data => {
+      console.log(data);
+      this.post = data;
     });
-
-   
+      
   }
-
-
 }
+
+
+
+

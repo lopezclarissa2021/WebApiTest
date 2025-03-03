@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 
-export interface PageLink{
+export interface PostLink{
   slug: string;
   component: Component | undefined;
   path: string;
