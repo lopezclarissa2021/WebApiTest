@@ -9,9 +9,11 @@ import { DataService, Post } from "../data.service";
   styleUrl: './post-list.component.css'
 })
 export class PostListComponent {
-  posts: Post[];
+  posts: Post[] = [];
 
   constructor(private data: DataService) {
-    this.posts = this.data.posts;
+    this.data.getAllPosts().subscribe(data => {
+      this.posts = data;
+    });
   }
 }

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { DataService, Post } from '../data.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Post } from '../data.service';
 
 @Component({
   selector: 'app-post-item',
@@ -8,12 +8,8 @@ import { DataService, Post } from '../data.service';
   styleUrl: './post-item.component.css'
 })
 
-export class PostListComponent {
-  posts: Post[] = [];
-  constructor(private data: DataService) {
-    this.data.getAllPosts().subscribe(data => {
-      this.posts = data;
-    })
-
-  }
+export class PostItemComponent {
+  @Input() post!: Post;
+  @Output() deletePost = new EventEmitter<boolean>();
+  
 }
