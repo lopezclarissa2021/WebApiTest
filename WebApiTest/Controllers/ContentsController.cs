@@ -11,7 +11,7 @@ using WebApiTest.Models;
 
 namespace WebApiTest.Controllers
 {
-    [Authorize]
+   
     [Route("api/[controller]")]
     [ApiController]
     public class ContentsController : ControllerBase

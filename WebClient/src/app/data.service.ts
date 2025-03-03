@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 export interface Page {
   contentId: number;
@@ -11,13 +13,12 @@ export interface Page {
   category: Category;
 }
 
-
-
 export interface Category {
   categoryId: number;
   categoryName: string;
   postedContent: Page[];
 }
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,10 +26,9 @@ export class DataService {
 
   pages: Page[];
 
-  constructor() {
+  constructor(private _http: HttpClient) {
     this.pages = [
-
-    {
+      {
         contentId: 1,
         title: 'Toast is the best!',
         body: 'I like toast.',
@@ -36,14 +36,12 @@ export class DataService {
         updatedAt: new Date(),
         visibility: 0,
         categoryId: 0,
-        category:
-        {
-
+        category: {
           categoryId: 0,
           categoryName: 'Toast',
           postedContent: []
         }
-       },
+      },
       {
         contentId: 2,
         title: 'Taco is the best!',
@@ -52,8 +50,7 @@ export class DataService {
         updatedAt: new Date(),
         visibility: 0,
         categoryId: 1,
-        category:
-        {
+        category: {
           categoryId: 1,
           categoryName: 'Taco',
           postedContent: []
@@ -67,15 +64,13 @@ export class DataService {
         updatedAt: new Date(),
         visibility: 0,
         categoryId: 3,
-        category:
-      {
-
-        categoryId: 3,
+        category: {
+          categoryId: 3,
           categoryName: 'HelloWorld',
-        postedContent: []
+          postedContent: []
         }
       },
-      {                               
+      {
         contentId: 4,
         title: 'Hello World Hello World Hello World!',
         body: 'I like Hello World.',
@@ -83,13 +78,36 @@ export class DataService {
         updatedAt: new Date(),
         visibility: 0,
         categoryId: 3,
-        category:
-        {
+        category: {
           categoryId: 3,
           categoryName: 'HelloWorld',
           postedContent: []
         }
       }
     ];
+  }
+
+  getAllPages(): Observable<Page[]> {
+    return this._http.get<Page[]>('/api/contents');
+  }
+
+  getPageById(id: number): Observable<Page> {
+    return this._http.get<Page>('/api/contents/' + id);
+  }
+
+  createPage(page: Page): Observable<Page> {
+    return this._http.post<Page>('/api/contents', page);
+  }
+
+  updatePage(page: Page): Observable<Page> {
+    return this._http.put<Page>('/api/contents/' + page.contentId, page);
+  }
+
+  deletePageById(id: number): Observable<any> {
+    return this._http.delete<any>('/api/contents/' + id);
+  }
+
+  deletePage(page: Page): Observable<any> {
+    return this._http.delete<any>('/api/contents/' + page.contentId);
   }
 }
