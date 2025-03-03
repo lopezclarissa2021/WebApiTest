@@ -10,6 +10,11 @@ import { Post } from '../data.service';
 
 export class PostItemComponent {
   @Input() post!: Post;
-  @Output() deletePost = new EventEmitter<boolean>();
-  
+  @Output() deletePost = new EventEmitter<number>();
+
+  constructor() { }
+
+  onDelete() {
+    this.deletePost.emit(this.post.contentId);
+  }
 }
