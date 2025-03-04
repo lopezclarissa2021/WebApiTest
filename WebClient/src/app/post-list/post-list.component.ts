@@ -16,4 +16,21 @@ export class PostListComponent {
       this.posts = data;
     });
   }
+
+  onDelete(id: number) {
+    console.log("I heard someone shouting at clouds");
+
+    let deletedPost = this.posts.find(p => p.contentId == id);
+    console.log("found post", deletedPost);
+
+    if (deletedPost != undefined) {
+      console.log("deletedPost should be defined");
+      this.data.deletePost(deletedPost).subscribe(result => {
+        console.log("post deleted", result);
+        this.posts = this.posts.filter(p => p.contentId != id);
+      });
+    }
+  }
+
+
 }

@@ -13,8 +13,7 @@ export class PostDetailComponent implements OnInit {
   id: number = 0;
   post: Post | undefined;
 
-  constructor(
-    private data: DataService,
+  constructor(private data: DataService,
     private route: ActivatedRoute,
     private router: Router
   ) {

@@ -6,10 +6,10 @@ interface PostLink {
   displayName: string;
 }
 @Component({
-    selector: 'app-nav-bar',
+    selector: 'app-NavBar',
     standalone: false,
-    templateUrl: './nav-bar.component.html',
-    styleUrl: './nav-bar.component.css'
+    templateUrl: './NavBar.component.html',
+    styleUrl: './NavBar.component.css'
 })
 export class NavBarComponent {
     staticPosts: PostLink[] = [
