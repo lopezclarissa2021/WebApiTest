@@ -49,7 +49,10 @@ namespace WebApiTest
 
 
             app.MapControllers();
-            app.MapRazorPosts();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+            });
 
            
 
