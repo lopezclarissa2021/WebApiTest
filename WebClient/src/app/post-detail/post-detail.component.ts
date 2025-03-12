@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService, Post } from '../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-post-detail',
@@ -11,7 +12,7 @@ import { mergeMap, tap } from 'rxjs/operators';
 })
 export class PostDetailComponent implements OnInit {
   id: number = 0;
-  post: Post | undefined;
+  post: BehaviorSubject<Post | undefined> = new BehaviorSubject<Post | undefined>(undefined);
 
   isLoaded: boolean = false;
 
@@ -20,33 +21,15 @@ export class PostDetailComponent implements OnInit {
     private router: Router) {
 
     this.id = 0;
-    this.post = {
-      contentId: 0,
-      title: "",
-      body: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      categoryId: 0,
-      category: {
-        categoryId: 0,
-        categoryName: '',
-        postedContent: []
-      },
-      visibility: 0
-    };
+    this.post = this.data.selectedPost$;
 
   }
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(
-      mergeMap(params => {
-        this.id = Number(params.get("id"));
-        return this.data.getPostById(this.id)
-      })
-    ).subscribe(data => {
-      console.log(data);
-      this.post = data;
+    this.route.paramMap.subscribe(params => {
+      this.id = Number(params.get("id"));
       this.isLoaded = true;
+      this.data.getPostById(this.id);
     });
   }
 

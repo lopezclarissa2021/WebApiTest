@@ -38,17 +38,48 @@ export class PostEditComponent implements OnInit {
     private fb: FormBuilder,
   ) {
 
-    this.initForm();
+    this.data.selectedPost$.subscribe(selectedPost => {
+      if (selectedPost == undefined) {
+        console.log("selected post fired in post-edit");
+        this.initEmptyForm();
+      } else {
+        this.initForm(selectedPost);
+      }
+    });
+
+
 
   }
 
-  initForm() {
+  initForm(postData: Post) {
+    this.post = postData;
+
+    this.postForm = this.fb.group({
+      contentId: [postData.contentId],
+      title: [postData.title],
+      body: [postData.body],
+      createdAt: [postData.createdAt],
+      updatedAt: [new Date()],
+      visibility: [postData.visibility],
+      categoryId: [postData.categoryId],
+      category: this.fb.group({
+        categoryId: [postData.category.categoryId],
+        categoryName: [postData.category.categoryName],
+        postedContent: this.fb.array(postData.category.postedContent)
+      })
+    });
+
+    this.isEditing = true;
+    this.isLoaded = true;
+  }
+
+  initEmptyForm() {
     this.postForm = this.fb.group({
       contentId: [0],
       title: ['Taco'],
       body: ['Lorem Ipsum'],
       createdAt: [new Date()],
-      updatedAt: [new Date],
+      updatedAt: [new Date()],
       visibility: [0],
       categoryId: [0],
       category: this.fb.group({
@@ -57,42 +88,18 @@ export class PostEditComponent implements OnInit {
         postedContent: this.fb.array([])
       })
     });
+
+    this.isEditing = false;
+    this.isLoaded = true;
   }
 
   ngOnInit(): void {
-    // get our id
-    this.route.paramMap.pipe(
-      switchMap(params => {
-        //console.log(params)
-        //if (params.get("id") == "create") {
-        //  console.log("hit")
-        //  // we are creating
-        //  return of({
-        //    contentId: 0,
-        //    title: "",
-        //    body: "",
-        //    createdAt: new Date(),
-        //    updatedAt: new Date(),
-        //    visibility: 0,
-        //    categoryId: 0,
-        //    category: {
-        //      categoryId: 0,
-        //      categoryName: "",
-        //      postedContent: []
-        //    }
-        //  });
-        //} else {
-        this.id = Number(params.get("id"));
-        this.isEditing = true;
-        return this.data.getPostById(this.id);
-        /*        }*/
-      })
-    ).subscribe(result => {
-      console.log(result);
-      this.isLoaded = true;
-      this.post = result;
-      this.loadForm();
-    })
+    this.route.paramMap.subscribe(params => {
+      this.id = Number(params.get("id"));
+      if (this.id > 0) {
+        this.data.getPostById(this.id);
+      }
+    });
   }
 
   loadForm() {
@@ -124,17 +131,12 @@ export class PostEditComponent implements OnInit {
     }
 
     if (this.isEditing) {
-      this.data.updatePost(this.post.contentId, savedPost).subscribe(result => {
-        // success updating a post
-        console.log("updated post", result);
-        this.router.navigate(['post', this.id]);
-      });
+      this.data.updatePost(this.post.contentId, savedPost);
+      this.router.navigate(['post', this.id]);
     } else {
-      this.data.createPost(savedPost).subscribe(result => {
-        // success adding a new post
-        console.log("Added new post", result);
-        this.router.navigate(['post', result.contentId]);
-      });
+      this.data.createPost(savedPost)
+      //this.router.navigate(['post', contentId]);
+      this.router.navigate(['post']);
     }
   }
 

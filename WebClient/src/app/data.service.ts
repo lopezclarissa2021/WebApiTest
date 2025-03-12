@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { delay, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, delay, map, Observable, tap } from 'rxjs';
+
 export interface Post {
   contentId: number;
   title: string;
@@ -24,108 +24,70 @@ export interface Category {
 })
 export class DataService {
 
-  posts: Post[];
+  posts$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([]);
+
+  selectedPost$: BehaviorSubject<Post | undefined> = new BehaviorSubject<Post | undefined>(undefined);
 
   constructor(private _http: HttpClient) {
-    this.posts = [
-      {
-        contentId: 1,
-        title: 'Toast is the best!',
-        body: 'I like toast.',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        visibility: 0,
-        categoryId: 0,
-        category: {
-          categoryId: 0,
-          categoryName: 'Toast',
-          postedContent: []
-        }
-      },
-      {
-        contentId: 2,
-        title: 'Taco is the best!',
-        body: 'I like tacos.',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        visibility: 0,
-        categoryId: 1,
-        category: {
-          categoryId: 1,
-          categoryName: 'Taco',
-          postedContent: []
-        }
-      },
-      {
-        contentId: 3,
-        title: 'Hello World is the best!',
-        body: 'I like Hello World.',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        visibility: 0,
-        categoryId: 3,
-        category: {
-          categoryId: 3,
-          categoryName: 'HelloWorld',
-          postedContent: []
-        }
-      },
-      {
-        contentId: 4,
-        title: 'Hello World Hello World Hello World!',
-        body: 'I like Hello World.',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        visibility: 0,
-        categoryId: 3,
-        category: {
-          categoryId: 3,
-          categoryName: 'HelloWorld',
-          postedContent: []
-        }
-      }
-    ];
   }
 
-  getAllPosts(): Observable<Post[]> {
-    return this._http.get<Post[]>('/api/contents');
-
-    /*
-    .pipe(
-      map(arr => {
-        return arr.map(e => {
-          e.title = "Toast";
-          return e;
-        });
-                 
-      })
-    );
-    */
+  selectPost(id: number): void {
+    // find the post by id
+    // check if post exists
+    // if exists trigger selectedPost$.next(the post)
+    // else trigger selectedPost$.next(undefined)
   }
 
-  getPostById(id: number): Observable<Post> {
-    return this._http.get<Post>('/api/contents/' + id).pipe(
+  getAllPosts(): void {
+    this._http.get<Post[]>('/api/contents').pipe(
+      tap(x => {
+        console.log('Fired getAllPosts with the following object');
+      }),
+      delay(1000)
+    ).subscribe(data => {
+      this.posts$.next(data);
+    })
+  }
+
+  getPostById(id: number): void {
+    this._http.get<Post>('/api/contents/' + id).pipe(
       tap(x => {
         console.log('Fired getPostById with the following object', x);
-     
+      }),
+      delay(1000)
+    ).subscribe((data: Post) => { // next
+      console.log("getPostById returned success", data)
+      this.selectedPost$.next(data);
+    }, (err) => { // err
+      this.selectedPost$.next(undefined);
+    }, () => {
+      console.log("getPostById Complete")
+    });
+  }
+
+  createPost(post: Post): void {
+    this._http.post<Post>('/api/contents/', post).subscribe(data => {
+      this.getAllPosts();
+    });
+  }
+
+  updatePost(id: number, post: Post): void {
+    this._http.put<Post>('/api/contents/' + id, post).subscribe(data => {
+      this.getAllPosts();
+    });
+  }
+
+  deletePostById(id: number): void {
+    this._http.delete<any>('/api/contents/' + id).pipe(
+      tap(x => {
+        console.log("deleting post by id");
       })
-
-    );
+    ).subscribe(result => {
+      this.getAllPosts();
+    });
   }
 
-  createPost(post: Post): Observable<Post> {
-    return this._http.post<Post>('/api/contents', post);
-  }
-
-  updatePost(post: Post): Observable<Post> {
-    return this._http.put<Post>('/api/contents/' + post.contentId, post);
-  }
-
-  deletePostById(id: number): Observable<any> {
-    return this._http.delete<any>('/api/contents/' + id);
-  }
-
-  deletePost(post: Post): Observable<any> {
-    return this._http.delete<any>('/api/contents/' + post.contentId);
+  deletePost(post: Post): void {
+    this.deletePostById(post.contentId);
   }
 }

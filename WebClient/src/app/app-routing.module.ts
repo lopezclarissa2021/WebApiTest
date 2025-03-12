@@ -11,7 +11,6 @@ const routes: Routes = [
   { path: "post/create", component: PostEditComponent },
   { path: "post/edit/:id", component: PostEditComponent },
   { path: "post/:id", component: PostDetailComponent },
-
 ];
 
 @NgModule({
